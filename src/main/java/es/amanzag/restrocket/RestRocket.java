@@ -2,6 +2,7 @@ package es.amanzag.restrocket;
 
 import java.io.IOException;
 
+import org.glassfish.grizzly.http.server.CLStaticHttpHandler;
 import org.glassfish.grizzly.http.server.HttpHandler;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.grizzly.http.server.Request;
@@ -19,8 +20,9 @@ public class RestRocket {
      * @throws IOException 
      */
     public static void main(String[] args) throws IOException {
-        // TODO Auto-generated method stub
         final HttpServer server = HttpServer.createSimpleServer();
+        
+        server.getServerConfiguration().addHttpHandler(new CLStaticHttpHandler(RestRocket.class.getClassLoader(), "static/"));
         
         server.getServerConfiguration().addHttpHandler(new HttpHandler() {
             @Override
