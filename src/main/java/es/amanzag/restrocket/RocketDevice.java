@@ -8,6 +8,8 @@ import javax.usb.UsbDisconnectedException;
 import javax.usb.UsbException;
 import javax.usb.UsbHostManager;
 import javax.usb.UsbHub;
+import javax.usb.UsbInterface;
+import javax.usb.UsbInterfacePolicy;
 
 /**
  * @author amanzaneque
@@ -65,6 +67,7 @@ public class RocketDevice {
         if (device == null) {
             throw new UsbException("Couldn't find USB device");
         }
+        device.getActiveUsbConfiguration().getUsbInterface((byte)0).claim((iface) -> true);
     }
 
     @SuppressWarnings("unchecked")

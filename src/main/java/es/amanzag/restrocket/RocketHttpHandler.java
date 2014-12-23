@@ -21,7 +21,7 @@ public class RocketHttpHandler extends HttpHandler {
     
     private final Pattern URL_PATTERN = Pattern.compile("/rocket/(.*)");
     
-    private final long DEFAULT_DURATION = 500;
+    private final long DEFAULT_DURATION = 200;
     
     private RocketDevice device;
     
@@ -41,7 +41,7 @@ public class RocketHttpHandler extends HttpHandler {
             executorService.submit(() -> {
                 try {
                     Command c = Command.valueOf(action);
-                    System.out.printf("Running command %s, from address: %s\n", c, request.getRemoteAddr());
+                    System.out.printf("Running command %s\n", c);
                     device.sendCommand(c, DEFAULT_DURATION);
                 } catch(Exception e) {
                     e.printStackTrace();
