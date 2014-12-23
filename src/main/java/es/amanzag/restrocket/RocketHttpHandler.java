@@ -1,5 +1,7 @@
 package es.amanzag.restrocket;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,8 +25,11 @@ public class RocketHttpHandler extends HttpHandler {
     
     private RocketDevice device;
     
+    private ExecutorService executorService;
+    
     public RocketHttpHandler(RocketDevice device) {
         this.device = device;
+        this.executorService = Executors.newSingleThreadExecutor();
     }
     
     @Override
@@ -33,7 +38,15 @@ public class RocketHttpHandler extends HttpHandler {
         
         if (request.getMethod() == Method.POST && urlMatcher.matches()) {
             String action = urlMatcher.group(1);
-            device.sendCommand(Command.valueOf(action), DEFAULT_DURATION);
+            executorService.submit(() -> {
+                try {
+                    Command c = Command.valueOf(action);
+                    System.out.printf("Running command %s, from address: %s\n", c, request.getRemoteAddr());
+                    device.sendCommand(c, DEFAULT_DURATION);
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+            });
             response.setStatus(HttpStatus.OK_200);
         } else {
             System.out.println("unknown request: " + request.getMethod() + " " + request.getPathInfo());
