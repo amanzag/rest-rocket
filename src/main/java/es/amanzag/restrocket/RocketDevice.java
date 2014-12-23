@@ -20,19 +20,21 @@ public class RocketDevice {
     private final short PRODUCT_ID = (short) 0x1010;
     
     public enum Command {
-        STOP(  new byte[]{ 0x02, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }), 
-        LEDON( new byte[]{ 0x03, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }), 
-        LEDOFF(new byte[]{ 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }), 
-        UP(    new byte[]{ 0x02, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }), 
-        DOWN(  new byte[]{ 0x02, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }), 
-        LEFT(  new byte[]{ 0x02, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }), 
-        RIGHT( new byte[]{ 0x02, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }), 
-        FIRE(  new byte[]{ 0x02, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 })
+        STOP(  new byte[]{ 0x02, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, false), 
+        LEDON( new byte[]{ 0x03, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, false), 
+        LEDOFF(new byte[]{ 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, false), 
+        UP(    new byte[]{ 0x02, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, true), 
+        DOWN(  new byte[]{ 0x02, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, true), 
+        LEFT(  new byte[]{ 0x02, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, true), 
+        RIGHT( new byte[]{ 0x02, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, true), 
+        FIRE(  new byte[]{ 0x02, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, false)
         ;
         
         private byte[] data;
-        private Command(byte[] data) {
+        boolean needsStop;
+        private Command(byte[] data, boolean needsStop) {
             this.data = data;
+            this.needsStop = needsStop;
         }
     }
 
@@ -85,14 +87,16 @@ public class RocketDevice {
         UsbControlIrp ctrlTransfer = device.createUsbControlIrp((byte)0x21, (byte)0x9, (short)0, (short)0);
         ctrlTransfer.setData(c.data);
         device.syncSubmit(ctrlTransfer);
-        try {
-            Thread.sleep(duration);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        if(c.needsStop) {
+            try {
+                Thread.sleep(duration);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            ctrlTransfer = device.createUsbControlIrp((byte)0x21, (byte)0x9, (short)0, (short)0);
+            ctrlTransfer.setData(Command.STOP.data);
+            device.syncSubmit(ctrlTransfer);
         }
-        ctrlTransfer = device.createUsbControlIrp((byte)0x21, (byte)0x9, (short)0, (short)0);
-        ctrlTransfer.setData(Command.STOP.data);
-        device.syncSubmit(ctrlTransfer);
     }
     
 }

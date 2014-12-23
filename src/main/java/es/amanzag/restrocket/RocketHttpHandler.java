@@ -36,7 +36,7 @@ public class RocketHttpHandler extends HttpHandler {
             device.sendCommand(Command.valueOf(action), DEFAULT_DURATION);
             response.setStatus(HttpStatus.OK_200);
         } else {
-            System.out.println("unknown request: " + request.getMethod() + "" + request.getPathInfo());
+            System.out.println("unknown request: " + request.getMethod() + " " + request.getPathInfo());
             response.setStatus(HttpStatus.NOT_FOUND_404);
         }
     }
