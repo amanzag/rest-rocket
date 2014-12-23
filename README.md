@@ -21,7 +21,7 @@ http://host:8080
 
 # RESTful API
 
-In addition to the web frontend, the application provides a rest API:
+In addition to the web frontend, the application provides a rest APIi (all POST):
 - /api/rocket/LEFT
 - /api/rocket/RIGHT
 - /api/rocket/UP
