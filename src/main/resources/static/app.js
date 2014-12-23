@@ -1,6 +1,6 @@
-var phonecatApp = angular.module('rocketLauncherApp', []);
+var rocketLauncherApp = angular.module('rocketLauncherApp', []);
 
-phonecatApp.controller('RocketController', function ($scope, $http) {
+rocketLauncherApp.controller('RocketController', function ($scope, $http) {
 	
 	$scope.sendCommand = function(command) {
 		$http.post('/api/rocket/' + command);
