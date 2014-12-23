@@ -1,26 +1,37 @@
-<html>
+<!doctype html>
+<html ng-app="rocketLauncherApp">
 <head>
     <title>Ecomm Rocket Launcher</title>
     <script type="text/javascript" src="angular-1.3.8.js"></script>
+    <script type="text/javascript" src="app.js"></script>
+    <link rel="stylesheet" type="text/css" href="app.css">
 </head>
-<body>
-    <h1>Ecomm Rocket Launcher</h1>
+<body ng-controller="RocketController">
     <table>
         <tr>
             <td>&nbsp;</td>
-            <td><button>Up</button></td>
+            <td><button ng-click="sendCommand('UP')">Up</button></td>
             <td>&nbsp;</td>
         </tr>
         <tr>
-            <td><button>Left</button></td>
-            <td><button>Fire</button></td>
-            <td><button>Right</button></td>
+            <td><button ng-click="sendCommand('LEFT')">Left</button></td>
+            <td><button class="fire" ng-click="sendCommand('FIRE')">Fire</button></td>
+            <td><button ng-click="sendCommand('RIGHT')">Right</button></td>
         </tr>
         <tr>
             <td>&nbsp;</td>
-            <td><button>Down</button></td>
-            <td>&nbsp;</td>
+            <td><button ng-click="sendCommand('DOWN')">Down</button></td>
+            <td>
+                <label class="led"> 
+                    <input type="checkbox"
+                        ng-model="ledStatus" ng-true-value="'LEDON'"
+                        ng-false-value="'LEDOFF'"
+                        ng-change="sendCommand(ledStatus)">
+                    Led
+                </label>
+            </td>
         </tr>
     </table>
+
 </body>
 </html>

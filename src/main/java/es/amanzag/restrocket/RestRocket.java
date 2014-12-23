@@ -20,7 +20,7 @@ public class RestRocket {
      */
     public static void main(String[] args) throws IOException, UsbException {
         RocketDevice device = new RocketDevice();
-        device.init();
+//        device.init();
         
         final HttpServer server = HttpServer.createSimpleServer();
         
