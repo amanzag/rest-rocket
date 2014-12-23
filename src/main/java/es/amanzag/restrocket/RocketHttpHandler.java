@@ -34,6 +34,7 @@ public class RocketHttpHandler extends HttpHandler {
     
     @Override
     public void service(Request request, Response response) throws Exception {
+        System.out.printf("Request %s %s received from %s\n", request.getMethod(), request.getRequestURL(), request.getRemoteAddr());
         Matcher urlMatcher = URL_PATTERN.matcher(request.getPathInfo());
         
         if (request.getMethod() == Method.POST && urlMatcher.matches()) {
