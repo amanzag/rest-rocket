@@ -17,7 +17,9 @@ import es.amanzag.restrocket.RocketDevice.Command;
  */
 public class RocketHttpHandler extends HttpHandler {
     
-    private Pattern regexp = Pattern.compile("/rocket/(.*)");
+    private final Pattern URL_PATTERN = Pattern.compile("/rocket/(.*)");
+    
+    private final long DEFAULT_DURATION = 500;
     
     private RocketDevice device;
     
@@ -27,11 +29,11 @@ public class RocketHttpHandler extends HttpHandler {
     
     @Override
     public void service(Request request, Response response) throws Exception {
-        Matcher urlMatcher = regexp.matcher(request.getPathInfo());
+        Matcher urlMatcher = URL_PATTERN.matcher(request.getPathInfo());
         
         if (request.getMethod() == Method.POST && urlMatcher.matches()) {
             String action = urlMatcher.group(1);
-            device.sendCommand(Command.valueOf(action), 1000);
+            device.sendCommand(Command.valueOf(action), DEFAULT_DURATION);
             response.setStatus(HttpStatus.OK_200);
         } else {
             System.out.println("unknown request: " + request.getMethod() + "" + request.getPathInfo());

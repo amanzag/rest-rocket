@@ -1,6 +1,7 @@
 package es.amanzag.restrocket;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import javax.usb.UsbException;
 
@@ -22,7 +23,9 @@ public class RestRocket {
         RocketDevice device = new RocketDevice();
 //        device.init();
         
-        final HttpServer server = HttpServer.createSimpleServer();
+        final HttpServer server = HttpServer.createSimpleServer(
+                null,
+                Integer.parseInt(Optional.ofNullable(System.getProperty("port")).orElse("8080")));
         
         server.getServerConfiguration().addHttpHandler(new CLStaticHttpHandler(RestRocket.class.getClassLoader(), "static/"));
         
