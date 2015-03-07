@@ -8,7 +8,7 @@
     <packaging>jar</packaging>
 
     <name>rest-rocket</name>
-    <url>http://maven.apache.org</url>
+    <url>https://github.com/amanzag/rest-rocket</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -68,4 +68,8 @@
             <version>1.2.0</version>
         </dependency>
     </dependencies>
+    <scm>
+        <url>https://github.com/amanzag/rest-rocket</url>
+        <connection>scm:git:https://github.com/amanzag/rest-rocket.git</connection>
+    </scm>
 </project>
