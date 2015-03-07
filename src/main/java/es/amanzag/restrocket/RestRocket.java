@@ -25,7 +25,8 @@ public class RestRocket {
         
         final HttpServer server = HttpServer.createSimpleServer(
                 null,
-                Integer.parseInt(Optional.ofNullable(System.getProperty("port")).orElse("8080")));
+                Optional.ofNullable(System.getProperty("port")).map(Integer::parseInt).orElse(8080)
+               );
         
         server.getServerConfiguration().addHttpHandler(new CLStaticHttpHandler(RestRocket.class.getClassLoader(), "static/"));
         

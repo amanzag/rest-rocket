@@ -1,5 +1,6 @@
 package es.amanzag.restrocket;
 
+import java.time.LocalDateTime;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
@@ -34,7 +35,7 @@ public class RocketHttpHandler extends HttpHandler {
     
     @Override
     public void service(Request request, Response response) throws Exception {
-        System.out.printf("Request %s %s received from %s\n", request.getMethod(), request.getRequestURL(), request.getRemoteAddr());
+        System.out.printf("[%s] Request %s %s received from %s\n", LocalDateTime.now(), request.getMethod(), request.getRequestURL(), request.getRemoteAddr());
         Matcher urlMatcher = URL_PATTERN.matcher(request.getPathInfo());
         
         if (request.getMethod() == Method.POST && urlMatcher.matches()) {
@@ -42,7 +43,7 @@ public class RocketHttpHandler extends HttpHandler {
             executorService.submit(() -> {
                 try {
                     Command c = Command.valueOf(action);
-                    System.out.printf("Running command %s\n", c);
+                    System.out.printf("[%s] Running command %s\n", LocalDateTime.now(), c);
                     device.sendCommand(c, DEFAULT_DURATION);
                 } catch(Exception e) {
                     e.printStackTrace();
