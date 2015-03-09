@@ -1,5 +1,6 @@
 table {
 	width: 300px;
+	float: left;
 }
 
 button {
@@ -15,4 +16,8 @@ button.fire {
 
 label.led {
 	color: red;
+}
+
+img.camera {
+	float: left;
 }
