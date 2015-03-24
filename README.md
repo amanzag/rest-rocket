@@ -29,3 +29,12 @@ In addition to the web frontend, the application provides a rest APIi (all POST)
 - /api/rocket/LEDON
 - /api/rocket/LEDOFF
 - /api/rocket/FIRE
+
+# Camera
+
+You can attach a webcam to your rocket launcher and the app will try to auto-detect it. When a camera is found, the application will grab images periodically and send them to the browser.
+
+You can modify the behaviour with some parameters:
+- -DdisableCamera=true --> disables camera support. Won't try to auto-detect it.
+- -Dcamera=N --> will try to use device N (useful if you have more than one camera). Defaults to 0.
+- 
