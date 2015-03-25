@@ -34,7 +34,7 @@ public class RestRocket {
         boolean cameraEnabled = !Optional.ofNullable(System.getProperty("disableCamera")).map(Boolean::parseBoolean).orElse(false);
         Camera camera = null;
         if (cameraEnabled) {
-            int cameraNumber = Optional.ofNullable(System.getProperty("camera")).map(Integer::parseInt).orElse(1);
+            int cameraNumber = Optional.ofNullable(System.getProperty("camera")).map(Integer::parseInt).orElse(0);
             System.out.println("Using camera device " + cameraNumber);
             camera = Camera.getDevice(cameraNumber);
             camera.open();
