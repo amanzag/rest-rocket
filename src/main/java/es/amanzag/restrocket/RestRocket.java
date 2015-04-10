@@ -43,16 +43,19 @@ public class RestRocket {
             System.out.println("Using camera device " + cameraNumber);
             camera = Camera.getDevice(cameraNumber);
             camera.open();
-            server.getServerConfiguration().addHttpHandler(new CameraHttpHandler(camera), "/camera/*");
         }
         
         ResourceConfig rc = new ResourceConfig();
         rc.packages(RestRocket.class.getPackage().toString());
+        Camera boundCamera = camera; 
         rc.register(new AbstractBinder() {
             @Override
             protected void configure() {
                 bind(rocket).to(RocketDevice.class);
                 bind(Executors.newSingleThreadExecutor()).to(ExecutorService.class);
+                if (cameraEnabled) {
+                    bind(boundCamera).to(Camera.class);
+                }
             }
         });
         server.getServerConfiguration().addHttpHandler(ContainerFactory.createContainer(GrizzlyHttpContainer.class, rc), "/api/*");

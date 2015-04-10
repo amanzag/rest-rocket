@@ -7,10 +7,10 @@ rocketLauncherApp.controller('RocketController', function ($scope, $http, $inter
 	}
 	$scope.showCamera = false;
 	
-	$http.head('/camera/frame').success(function() {
+	$http.head('/api/camera/frame').success(function() {
 		$interval(function() {
 			$scope.showCamera = true;
-			$scope.cameraUrl = '/camera/frame?' + Math.random();
+			$scope.cameraUrl = '/api/camera/frame?' + Math.random();
 		}, 2000);
 	});
 	
