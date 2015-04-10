@@ -2,11 +2,17 @@ package es.amanzag.restrocket;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.usb.UsbException;
 
 import org.glassfish.grizzly.http.server.CLStaticHttpHandler;
 import org.glassfish.grizzly.http.server.HttpServer;
+import org.glassfish.hk2.utilities.binding.AbstractBinder;
+import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpContainer;
+import org.glassfish.jersey.server.ContainerFactory;
+import org.glassfish.jersey.server.ResourceConfig;
 
 /**
  * @author amanzaneque
@@ -29,7 +35,6 @@ public class RestRocket {
                 );
         
         server.getServerConfiguration().addHttpHandler(new CLStaticHttpHandler(RestRocket.class.getClassLoader(), "static/"));
-        server.getServerConfiguration().addHttpHandler(new RocketHttpHandler(rocket), "/api/*");
 
         boolean cameraEnabled = !Optional.ofNullable(System.getProperty("disableCamera")).map(Boolean::parseBoolean).orElse(false);
         Camera camera = null;
@@ -40,6 +45,18 @@ public class RestRocket {
             camera.open();
             server.getServerConfiguration().addHttpHandler(new CameraHttpHandler(camera), "/camera/*");
         }
+        
+        ResourceConfig rc = new ResourceConfig();
+        rc.packages(RestRocket.class.getPackage().toString());
+        rc.register(new AbstractBinder() {
+            @Override
+            protected void configure() {
+                bind(rocket).to(RocketDevice.class);
+                bind(Executors.newSingleThreadExecutor()).to(ExecutorService.class);
+            }
+        });
+        server.getServerConfiguration().addHttpHandler(ContainerFactory.createContainer(GrizzlyHttpContainer.class, rc), "/api/*");
+        
         
         server.start();
 
