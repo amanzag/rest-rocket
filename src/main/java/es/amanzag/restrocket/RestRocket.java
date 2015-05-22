@@ -27,7 +27,7 @@ public class RestRocket {
      */
     public static void main(String[] args) throws IOException, UsbException {
         RocketDevice rocket = new RocketDevice();
-        rocket.init();
+        //rocket.init();
         
         final HttpServer server = HttpServer.createSimpleServer(
                 null,
@@ -35,6 +35,7 @@ public class RestRocket {
                 );
         
         server.getServerConfiguration().addHttpHandler(new CLStaticHttpHandler(RestRocket.class.getClassLoader(), "static/"));
+        
 
         boolean cameraEnabled = !Optional.ofNullable(System.getProperty("disableCamera")).map(Boolean::parseBoolean).orElse(false);
         Camera camera = null;
@@ -47,6 +48,7 @@ public class RestRocket {
         
         ResourceConfig rc = new ResourceConfig();
         rc.packages(RestRocket.class.getPackage().toString());
+        // rc.register(JsonMoxyProvider.class);
         Camera boundCamera = camera; 
         rc.register(new AbstractBinder() {
             @Override
