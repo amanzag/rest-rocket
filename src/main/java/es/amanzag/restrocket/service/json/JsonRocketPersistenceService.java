@@ -1,28 +1,12 @@
 package es.amanzag.restrocket.service.json;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.transform.stream.StreamSource;
 
-import org.eclipse.persistence.internal.oxm.record.json.JSONReader;
-import org.eclipse.persistence.jaxb.JAXBContextFactory;
-import org.eclipse.persistence.jaxb.JAXBContextProperties;
-import org.eclipse.persistence.jaxb.MarshallerProperties;
-import org.eclipse.persistence.jaxb.rs.MOXyJsonProvider;
-
-import es.amanzag.restrocket.dto.Direction;
-import es.amanzag.restrocket.dto.Position;
 import es.amanzag.restrocket.dto.Target;
 import es.amanzag.restrocket.dto.TargetList;
 import es.amanzag.restrocket.service.RocketPersistenceService;
@@ -55,6 +39,7 @@ public class JsonRocketPersistenceService implements RocketPersistenceService {
 	@Override
 	public synchronized void persistTarget(Target target) {
 		
+
 	}
 	
 	@Override
@@ -88,9 +73,4 @@ public class JsonRocketPersistenceService implements RocketPersistenceService {
 
 		return properties;
 	}
-
-    public static void main(String[] args) throws JAXBException, IOException, RocketException {
-        JsonRocketPersistenceService s = new JsonRocketPersistenceService();
-        s.getTarget("juana");
-    }
 }
