@@ -2,6 +2,7 @@ package es.amanzag.restrocket;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -24,8 +25,9 @@ public class RestRocket {
      * @param args
      * @throws IOException 
      * @throws UsbException 
+     * @throws InterruptedException 
      */
-    public static void main(String[] args) throws IOException, UsbException {
+    public static void main(String[] args) throws IOException, UsbException, InterruptedException {
         RocketDevice rocket = new RocketDevice();
         rocket.init();
         
@@ -60,18 +62,24 @@ public class RestRocket {
         });
         server.getServerConfiguration().addHttpHandler(ContainerFactory.createContainer(GrizzlyHttpContainer.class, rc), "/api/*");
         
-        
-        server.start();
+        CountDownLatch latch = new CountDownLatch(1);
+        Camera cameraReference = camera;
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            try {
+                server.shutdown();
+                rocket.close();
+                if (cameraReference != null) {
+                    cameraReference.close();
+                }
+                latch.countDown();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }));
 
-        System.out.println("Press any key to exit");
-        System.in.read();
-        
-        server.shutdown();
-        rocket.close();
-        if (camera != null) {
-            camera.close();
-        }
-        
+        server.start();
+        // keep the thread waiting so that the app doesn't exit
+        latch.await();
     }
 
 }
